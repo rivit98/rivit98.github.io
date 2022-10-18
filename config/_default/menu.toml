@@ -1,0 +1,36 @@
+# Configure main menu and social menu
+[[main]]
+identifier = "home"
+name = "Home"
+url = "/"
+weight = -100
+
+[main.params]
+icon = "home"
+newtab = false
+
+[[main]]
+identifier = "feed"
+name = "Feed"
+url = "/index.html"
+weight = 500
+
+[main.params]
+icon = "rss"
+newtab = true
+
+[[social]]
+identifier = "github"
+name = "GitHub"
+url = "https://github.com/rivit98"
+
+[social.params]
+icon = "brand-github"
+
+[[social]]
+identifier = "twitter"
+name = "Twitter"
+url = "https://twitter.com/rivit98"
+
+[social.params]
+icon = "brand-twitter"
