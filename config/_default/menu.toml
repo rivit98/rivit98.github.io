@@ -12,7 +12,7 @@ newtab = false
 [[main]]
 identifier = "feed"
 name = "Feed"
-url = "/index.html"
+url = "/index.xml"
 weight = 500
 
 [main.params]
