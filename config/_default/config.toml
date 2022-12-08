@@ -1,4 +1,5 @@
 baseURL = 'https://rivit.dev/'
+
 languageCode = 'en-us'
 title = "Rivit's blog"
 paginate = 10
@@ -6,5 +7,4 @@ theme = 'hugo-theme-stack'
 
 DefaultContentLanguage = "en"
 hasCJKLanguage = false
-
 

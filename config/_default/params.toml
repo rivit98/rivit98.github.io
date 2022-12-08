@@ -2,6 +2,7 @@
 mainSections = ["post"]
 # Output page's full content in RSS.
 rssFullContent = true
+custom_css  = ["scss/custom.scss"]
 
 [footer]
 since = 2022

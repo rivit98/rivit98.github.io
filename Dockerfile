@@ -1,4 +1,4 @@
-FROM klakegg/hugo as builder
+FROM jakejarvis/hugo-extended:latest as builder
 
 WORKDIR /app
 COPY . .
