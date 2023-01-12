@@ -8,3 +8,8 @@ theme = 'hugo-theme-stack'
 DefaultContentLanguage = "en"
 hasCJKLanguage = false
 
+[imaging]
+  resampleFilter = "lanczos"
+  quality = 100
+  anchor = "smart"
+  hint = "text"
