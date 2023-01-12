@@ -244,7 +244,7 @@ ia()
 - run on remote `./solve.py REMOTE`
 
 
-### Leak libc version
+### Leaking libc version
 
 To do so, we have to move vm's `esp` register to point at the beginning of `libc` section in memory. We can quickly calculate offset using the debugger:
 
