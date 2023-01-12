@@ -903,6 +903,8 @@ push ebx
 rwctf{A_S1gn_In_CHllenge}
 ```
 
+All files can be found [here](https://github.com/rivit98/ctf-writeups/tree/master/realworld_ctf_2022/tinyvm).
+
 ## Summary
 
 Overall, this was a nice challenge, and it wasn't hard. The main takeaway is that libc GOT can be used to call arbitrary code because `printf` function is using some of GOT entries internally. 
