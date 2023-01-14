@@ -13,9 +13,17 @@ div.highlight {
 :root {
     --base-font-family: 'Quicksand', serif;
     --code-font-family: 'Ubuntu Mono', monospace;
+
+    --body-text-color: #707070;
+    --card-text-color-tertiary: #767676;
+
+    li.current span {
+    	font-style: italic;
+    }
 }
 
 // .container {
 //     --right-sidebar-max-width: 20% !important;
 //     --left-sidebar-max-width: 15% !important;
 // }
+
