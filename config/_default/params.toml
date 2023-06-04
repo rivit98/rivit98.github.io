@@ -1,77 +1,270 @@
-# Pages placed under these sections will be shown on homepage and archive page.
-mainSections = ["post"]
-# Output page's full content in RSS.
-rssFullContent = true
-custom_css  = ["scss/custom.scss"]
+# site description
+description = "Rivit's blog | ctf writeups, research and findings"
 
+# site default theme ("light", "dark", "black", "auto")
+defaultTheme = "auto"
+# date format
+dateFormat = "2006-01-02"
+# enable PWA
+enablePWA = false
+# [Experimental] Bundle js
+bundle = false
+# [Experimental] cache remote images, more info: https://github.com/HEIGE-PCloud/DoIt/pull/860#issue-1574342372
+cacheRemoteImages = false
+# Header config
+[header]
+  # desktop header mode ("fixed", "normal", "auto")
+  desktopMode = "fixed"
+  # mobile header mode ("fixed", "normal", "auto")
+  mobileMode = "fixed"
+  # theme change mode ("switch", "select")
+  themeChangeMode = "switch"
+  # Header title config
+  [header.title]
+    # title name
+    name = "Rivit's blog"
+    # whether to use typeit animation for title name
+    typeit = false
+
+    post = "<span style='font-size:0.6em;font-weight:normal'> ctf writeups, research and findings</span>"
+
+# Footer config
 [footer]
-since = 2022
-customText = ""
+  enable = true
+  # whether to show Hugo and theme info
+  hugo = true
+  # whether to show copyright info
+  copyright = true
+  # whether to show the author
+  author = false
+  # site creation time
+  since = 2021
+  # license info (HTML format is supported)
+  license= '<a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>'
 
-[dateFormat]
-published = "Jan 02, 2006"
-lastUpdated = "Jan 02, 2006 15:04 MST"
+# Section (all posts) page config
+[section]
+  # special amount of posts in each section page
+  paginate = 20
+  # date format (month and day)
+  dateFormat = "2006-01-02"
+  # amount of RSS pages
+  rss = 10
+  # recently updated posts settings
+  [section.recentlyUpdated]
+    enable = false
+    rss = true
+    days = 30
+    maxCount = 10
 
-[sidebar]
-emoji = ""
-subtitle = "ctf writeups, research, findings..."
+# List (category or tag) page config
+[list]
+  # special amount of posts in each list page
+  paginate = 20
+  # date format (month and day)
+  dateFormat = "2006-01-02"
+  # amount of RSS pages
+  rss = 10
 
-[sidebar.avatar]
-enabled = true
-local = true
-src = "img/avatar.png"
+# Page config
+[page]
+  # whether to hide a page from home page
+  hiddenFromHomePage = false
+  # whether to hide a page from search results
+  hiddenFromSearch = false
+  # whether to enable twemoji
+  twemoji = false
+  # whether to enable lightgallery
+  lightgallery = false
+  # whether to enable the ruby extended syntax
+  ruby = false
+  # whether to enable the fraction extended syntax
+  fraction = false
+  # whether to enable the fontawesome extended syntax
+  fontawesome = true
+  # whether to show link to Raw Markdown content of the content
+  linkToMarkdown = false
+  # whether to show the full text content in RSS
+  rssFullText = false
+  # whether to enable series navigation
+  seriesNavigation = true
 
-[article]
-math = false
-readingTime = true
-toc = true
+  # Display a message at the beginning of an article to warn the reader that its content might be outdated.
+  [page.toc]
+    # whether to enable the table of the contents
+    enable = true
+    # whether to keep the static table of the contents in front of the post
+    keepStatic = false
+    # whether to make the table of the contents in the sidebar automatically collapsed
+    auto = true
+  # Code config
+  [page.code]
+    # whether to show the copy button of the code block
+    copy = true
+    # the maximum number of lines of displayed code by default
+    maxShownLines = 10000
+  # Table config
+  [page.table]
+    # whether to enable sorting in the tables
+    sort = true
+  [page.header]
+    # whether to enable auto header numbering
+    [page.header.number]
+      enable = false
+      [page.header.number.format]
+        h2 = "{h2} {title}"
+        h3 = "{h2}.{h3} {title}"
+        h4 = "{h2}.{h3}.{h4} {title}"
+        h5 = "{h2}.{h3}.{h4}.{h5} {title}"
+        h6 = "{h2}.{h3}.{h4}.{h5}.{h6} {title}"
+  # KaTeX mathematical formulas config (KaTeX https://katex.org/)
+  [page.math]
+    enable = false
+    # default block delimiter is $$ ... $$ and \\[ ... \\]
+    blockLeftDelimiter = ""
+    blockRightDelimiter = ""
+    # default inline delimiter is $ ... $ and \\( ... \\)
+    inlineLeftDelimiter = ""
+    inlineRightDelimiter = ""
+    # KaTeX extension copy_tex
+    copyTex = true
+    # KaTeX extension mhchem
+    mhchem = false
+ 
+  # Social share links in post page
+  [page.share]
+    enable = true
+    Facebook = true
+    HackerNews = true
+    Linkedin = true
+    Reddit = true
+    Telegram = true
+    Twitter = true
+    Mastodon = true
+  
+  # Page SEO config
+  [page.seo]
+    # image URL
+    images = []
+    # Publisher info
+    [page.seo.publisher]
+      name = "xxxx"
+      logoUrl = "/img/avatar.webp"
+  # Related content config
+  [page.related]
+    enable = false
+    count = 5
 
-[article.license]
-enabled = true
-default = "Licensed under CC BY-NC-SA 4.0"
+# TypeIt config
+[typeit]
+  # typing speed between each step (measured in milliseconds)
+  speed = 100
+  # blinking speed of the cursor (measured in milliseconds)
+  cursorSpeed = 1000
+  # character used for the cursor (HTML format is supported)
+  cursorChar = "|"
+  # cursor duration after typing finishing (measured in milliseconds, "-1" means unlimited)
+  duration = -1
+
+# Site verification code for Google/Bing/Yandex/Pinterest/Baidu
+[verification]
+  google = ""
+  bing = ""
+  yandex = ""
+  pinterest = ""
+  baidu = ""
+  so = ""
+  sogou = ""
+
+# Analytics config
+[analytics]
+  enable = false
+  # Google Analytics
+  [analytics.google]
+    id = ""
+    # whether to anonymize IP
+    anonymizeIP = true
+
+# Cookie consent config
+[cookieconsent]
+  enable = false
+  # text strings used for Cookie consent banner
+  [cookieconsent.content]
+    message = ""
+    dismiss = ""
+    link = ""
+
+# CDN config for third-party library files
+[cdn]
+  # CDN data file name, disabled by default
+  # ("jsdelivr.yml")
+  # located in "themes/DoIt/assets/data/cdn/" directory
+  # you can store your own data files in the same path under your project:
+  # "assets/data/cdn/"
+  data = ""
+
+# Compatibility config
+[compatibility]
+  # whether to use Polyfill.io to be compatible with older browsers
+  polyfill = false
+  # whether to use object-fit-images to be compatible with older browsers
+  objectFit = false
 
 
-## Widgets
-[[widgets.homepage]]
-type = "search"
+# Search config
+[search]
+  enable = true
+  # type of search engine ("algolia", "fuse")
+  type = "fuse"
+  # max index length of the chunked content
+  contentLength = 4000
+  # placeholder of the search bar
+  placeholder = ""
+  # max number of results length
+  maxResultLength = 10
+  # snippet length of the result
+  snippetLength = 300
+  # HTML tag name of the highlight part in results
+  highlightTag = "em"
+  # whether to use the absolute URL based on the baseURL in search index
+  absoluteURL = false
+  [search.fuse]
+    # https://fusejs.io/api/options.html
+    isCaseSensitive = false
+    minMatchCharLength = 2
+    findAllMatches = false
+    location = 0
+    threshold = 0.1
+    distance = 100
+    ignoreLocation = true
+    useExtendedSearch = false
+    ignoreFieldNorm = false
 
-[[widgets.homepage]]
-type = "archives"
-
-[widgets.homepage.params]
-limit = 5
-
-[[widgets.homepage]]
-type = "categories"
-
-[widgets.homepage.params]
-limit = 5
-
-[[widgets.homepage]]
-type = "tag-cloud"
-
-[widgets.homepage.params]
-limit = 10
-
-[[widgets.page]]
-type = "toc"
-
-[opengraph.twitter]
-site = "rivit98"
-card = "summary_large_image"
-
-[defaultImage.opengraph]
-enabled = false
-local = false
-src = ""
-
-[colorScheme]
-toggle = true
-default = "dark"
-
-[imageProcessing.cover]
-enabled = true
-
-[imageProcessing.content]
-enabled = true
-
+# Home page config
+[home]
+  # amount of RSS pages
+  rss = 10
+  # Home page profile
+  [home.profile]
+    enable = false
+    # Gravatar Email for preferred avatar in home page
+    gravatarEmail = ""
+    # URL of avatar shown in home page
+    avatarURL = ""
+    # URL the avatar links to
+    avatarLinkURL = ""
+    # title shown in home page (HTML format is supported)
+    title = ""
+    # subtitle shown in home page
+    subtitle = ""
+    # whether to use typeit animation for subtitle
+    typeit = false
+    # whether to show social links
+    social = true
+    # disclaimer (HTML format is supported)
+    disclaimer = ""
+  # Home page posts
+  [home.posts]
+    enable = true
+    # special amount of posts in each home posts page
+    paginate = 10

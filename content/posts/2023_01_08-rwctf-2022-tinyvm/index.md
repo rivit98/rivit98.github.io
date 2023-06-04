@@ -2,7 +2,6 @@
 title: "Real World CTF 5th - tinyvm (pwn)"
 description: VM pwning
 date: 2023-01-08T13:02:33Z
-type: post
 categories:
     - ctf
     - writeup
@@ -15,8 +14,6 @@ tags:
     - writeup
     - binexp
 ---
-
-## Intro
 
 This week I participated in [Real World CTF 5th](https://ctftime.org/event/1797) and solved a challenge called `tinyvm`. It is a VM pwn challenge where we need to spawn a shell on a remote target. Here is my writeup for it.
 

@@ -2,14 +2,13 @@
 title: Advent of code 2022
 description: Learning Rust basics by doing AoC
 date: 2022-12-08T20:14:48Z
-type: post
 categories:
     - rust
     - aoc
 tags:
     - rust
     - advent of code
-    - 
+
 ---
 
 As a programmer, it's important to constantly challenge yourself and learn new things. One way to do this is by tackling a new programming language. Recently, I decided to take on the challenge of learning Rust by doing [Advent of Code 2022](https://adventofcode.com/2022). It is an annual programming challenge that consists of a series of small coding puzzles released daily during the month of December. It's a great way to practice your skills and learn new techniques, and it's a lot of fun (sometimes it is not true). 

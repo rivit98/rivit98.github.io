@@ -1,15 +1,34 @@
 baseURL = 'https://rivit.dev/'
+# [en, zh-cn, fr, pl, ...] determines default content language
+defaultContentLanguage = "en"
+# theme
+theme = "DoIt"
 
-languageCode = 'en-us'
+# website title
 title = "Rivit's blog"
-paginate = 10
-theme = 'hugo-theme-stack'
 
-DefaultContentLanguage = "en"
+# whether to use robots.txt
+enableRobotsTXT = true
+# whether to use git commit log
+enableGitInfo = false
+# whether to use emoji code
+enableEmoji = true
+
+# ignore some build errors
+# ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
+
+languageCode = "en"
+# language name
+languageName = "English"
+# whether to include Chinese/Japanese/Korean
 hasCJKLanguage = false
+# default amount of posts in each pages
+paginate = 10
+# [UA-XXXXXXXX-X] google analytics code (replaced by params.analytics.google)
+googleAnalytics = ""
 
 [imaging]
-  resampleFilter = "lanczos"
+  anchor = 'Smart'
+  hint = 'text'
   quality = 100
-  anchor = "smart"
-  hint = "text"
+  resampleFilter = 'lanczos'

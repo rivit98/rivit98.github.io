@@ -2,7 +2,6 @@
 title: "hxp 2022 - browser_insanity (pwn)"
 description: KalibriOS browser pwning
 date: 2023-03-13T19:19:48Z
-type: post
 categories:
     - ctf
     - writeup
@@ -16,8 +15,6 @@ tags:
     - binexp
 ---
 
-
-## Intro
 
 This week I participated in [hxp 2022](https://ctftime.org/event/1845) and I've managed to solve a challenge called `browser_insanity`. It was a pwn challenge where we need to read arbitrary file in the filesystem.
 

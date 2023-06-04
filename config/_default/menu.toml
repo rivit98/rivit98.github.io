@@ -1,36 +1,34 @@
-# Configure main menu and social menu
 [[main]]
-identifier = "home"
-name = "Home"
-url = "/"
-weight = -100
-
-[main.params]
-icon = "home"
-newtab = false
-
+  identifier = "posts"
+  name = "Posts"
+  url = "/posts/"
+  title = ""
+  weight = 1
 [[main]]
-identifier = "feed"
-name = "Feed"
-url = "/index.xml"
-weight = 500
-
-[main.params]
-icon = "rss"
-newtab = true
-
-[[social]]
-identifier = "github"
-name = "GitHub"
-url = "https://github.com/rivit98"
-
-[social.params]
-icon = "brand-github"
-
-[[social]]
-identifier = "twitter"
-name = "Twitter"
-url = "https://twitter.com/rivit98"
-
-[social.params]
-icon = "brand-twitter"
+  identifier = "categories"
+  name = "Categories"
+  url = "/categories/"
+  title = ""
+  weight = 2
+[[main]]
+  identifier = "tags"
+  name = "Tags"
+  url = "/tags/"
+  title = ""
+  weight = 3
+[[main]]
+  identifier = "github"
+  pre = "<i class='fab fa-github fa-fw'></i>"
+  post = ""
+  name = ""
+  url = "https://github.com/rivit98"
+  title = "GitHub"
+  weight = 4
+[[main]]
+  identifier = "twitter"
+  pre = "<i class='fab fa-twitter fa-fw'></i>"
+  post = ""
+  name = ""
+  url = "https://twitter.com/rivit98"
+  title = "Twitter"
+  weight = 5

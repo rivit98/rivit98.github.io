@@ -1,6 +1,16 @@
 # Markdown renderer configuration
-[goldmark.renderer]
-unsafe = false
+[goldmark]
+  [goldmark.extensions]
+    definitionList = true
+    footnote = true
+    linkify = true
+    strikethrough = true
+    table = true
+    taskList = true
+    typographer = true
+  [goldmark.renderer]
+    # whether to use HTML tags directly in the document
+    unsafe = true
 
 [tableOfContents]
 endLevel = 4
