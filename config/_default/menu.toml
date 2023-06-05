@@ -32,3 +32,11 @@
   url = "https://twitter.com/rivit98"
   title = "Twitter"
   weight = 5
+[[main]]
+  identifier = "rss"
+  pre = "<i class='fas fa-rss fa-fw'></i>"
+  post = ""
+  name = ""
+  url = "/index.xml"
+  title = "RSS"
+  weight = 6
