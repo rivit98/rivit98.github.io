@@ -16,8 +16,7 @@ tags:
 ---
 
 
-This week I participated in [hxp 2022](https://ctftime.org/event/1845) and I've managed to solve a challenge called `browser_insanity`. It was a pwn challenge where we need to read arbitrary file in the filesystem.
-
+Last week, I participated in [hxp 2022](https://ctftime.org/event/1845), an esteemed CTF event, where I successfully tackled the pwn challenge "browser_insanity." This captivating exploit required reading arbitrary files from the Kalibri OS filesystem, pushing me to dive deep into KalibriOS  browser vulnerabilities and hone my reverse engineering skills.
 
 ## Description
 
