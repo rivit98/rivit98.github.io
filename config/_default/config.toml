@@ -25,7 +25,7 @@ hasCJKLanguage = false
 # default amount of posts in each pages
 paginate = 10
 # [UA-XXXXXXXX-X] google analytics code (replaced by params.analytics.google)
-googleAnalytics = ""
+googleAnalytics = "G-P8PM36X0J7"
 
 [imaging]
   anchor = 'Smart'

@@ -178,10 +178,10 @@ cacheRemoteImages = false
 
 # Analytics config
 [analytics]
-  enable = false
+  enable = true
   # Google Analytics
   [analytics.google]
-    id = ""
+    id = "G-P8PM36X0J7"
     # whether to anonymize IP
     anonymizeIP = true
 
