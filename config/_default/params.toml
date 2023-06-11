@@ -88,6 +88,12 @@ cacheRemoteImages = false
   rssFullText = false
   # whether to enable series navigation
   seriesNavigation = true
+  # whether to enable last modified time
+  enableLastMod = false
+  # whether to enable word count
+  enableWordCount = false
+  # whether to enable reading time estimation
+  enableReadingTime = true
 
   # Display a message at the beginning of an article to warn the reader that its content might be outdated.
   [page.toc]
