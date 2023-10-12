@@ -16,13 +16,13 @@ tags:
 ---
 
 
-Last week, I participated in [hxp 2022](https://ctftime.org/event/1845), an esteemed CTF event, where I successfully tackled the pwn challenge "browser_insanity." This captivating exploit required reading arbitrary files from the Kalibri OS filesystem, pushing me to dive deep into KalibriOS  browser vulnerabilities and hone my reverse engineering skills.
+Last week, I participated in [hxp 2022](https://ctftime.org/event/1845), an esteemed CTF event, where I successfully tackled the pwn challenge "browser_insanity." This captivating exploit required reading arbitrary files from the KolibriOS OS filesystem, pushing me to dive deep into KalibriOS browser vulnerabilities and hone my reverse engineering skills.
 
 ## Description
 
 Ever wanted to hack a tiny OS written in x86-32 assembly and C\-\-? Me neither but it’s hxp CTF 2022.
 
-Give us an URL, the user in the KolibriOS VM will visit it. You need to get the flag from `/hd0/1/flag.txt`
+Give us the URL, the user in the KolibriOS VM will visit it. You need to get the flag from `/hd0/1/flag.txt`
 The source code you could get from: https://repo.or.cz/kolibrios.git/tree/7fc85957a89671d27f48181d15e386cd83ee7f1a
 
 The browser is at `programs/cmm/browser` in the source tree. It relies on a couple of different libraries (e.g. `programs/develop/libraries`), grep around.
@@ -38,7 +38,7 @@ So basically we are provided with an unmodified [KalibriOS](https://kolibrios.or
 
 ## Environment
 
-To do a bit of reconnaissance I started the VM using slightly modified `run_vm.sh` script which loads the `kolibri.img` and looked around. After booting we see:
+To do a bit of reconnaissance, I started the VM using slightly modified `run_vm.sh` script which loads the `kolibri.img` and looked around. After booting, we see:
 
 ![](kolibrios_main.png)
 
@@ -46,12 +46,12 @@ There is also a built-in debugger:
 
 ![](kolibri_debug.png)
 
-We can load programs into it using `load` command, so in order to debug webview we can run `load /sys/network/webview`. After loading we see 32bit assembly :) I've experimented with it for a little and looks like all memory is executable, if we had control over `ebp`, we could execute arbitrary code. Sounds good.
+We can load programs into it using `load` command, so in order to debug webview we can run `load /sys/network/webview`. After loading a program, we see 32bit assembly :) I've experimented with it for a little, and it looks like all memory is executable, if we had control over `ebp`, we could execute arbitrary code. Sounds good.
 
 
 ## Vulnerability
 
-The WebView browser is written in C\-\- language which is similar to C, so reading code was not a problem. The browser has many dependency libraries. During the CTF I was thinking about making a simple fuzzer which will test the browser code and look for crashes, but first I've decided to look around for a bit longer and I've found an interesting line of code in one of the functions responsible for setting styles for html elements:
+The WebView browser is written in C\-\- language which is similar to C, so reading code was not a problem. The browser has many dependency libraries. During the CTF I was thinking about making a simple fuzzer which will test the browser code and look for crashes, but first I've decided to look around for a bit longer, and I've found an interesting line of code in one of the functions responsible for setting styles for html elements:
 
 ```c
 void TWebBrowser::tag_meta_xml()
@@ -136,7 +136,7 @@ Now we need to host the page somewhere, run the WebView under the debugger and v
 
 ![](webview_crash.png)
 
-Page fault! Now we need to somehow check what happened and where. To do so, it would be good to set breakpoint before call to faulty `strcpy`. I found the binary in `/sys/network` but I couldn't disassemble it. After a little bit of googling I figured out that it is packed by tool called `kpack`, so to unpack it I used [kunpack](http://board.kolibrios.org/viewtopic.php?f=6&t=1954#p38497) and then I was able to load it into disassembler (binary does not have symbols). After a while I had the address when binary is calling our `strcpy` - 0x6a8b, so we can easily put the breakpoint there (no ASLR here!) and inspect where data is being copied.
+Page fault! Now we need to somehow check what happened and where. To do so, it would be good to set breakpoint before call to faulty `strcpy`. I found the binary in `/sys/network` but I couldn't disassemble it. After a little bit of googling I figured out that it is packed by tool called `kpack`, so to unpack it I used [kunpack,](http://board.kolibrios.org/viewtopic.php?f=6&t=1954#p38497) and then I was able to load it into disassembler (binary does not have symbols). After a while I had the address when binary is calling our `strcpy` - 0x6a8b, so we can easily put the breakpoint there (no ASLR here!) and inspect where data is being copied.
 
 ![](strcpy_debug.png)
 
@@ -148,7 +148,7 @@ We have it - we are controlling, so now when code does a `ret` from `strcpy` it 
 
 ### Crafting the exploit
 
-Not really, we can utilize the html comments, they shouldn't be mutated in any way. Here is the code responsible for parsing them:
+Not really, we can utilize the html comments; they shouldn't be mutated in any way. Here is the code responsible for parsing them:
 
 ```c
 bool _tag::parse(dword _bufpos, bufend)
@@ -181,12 +181,12 @@ bool _tag::parse(dword _bufpos, bufend)
 ...
 ```
 
-so we can easily put our payload in the comment, but we need to find out where it will be located in memory. We can craft a simple web page and put a breakpoint in function above. Let's put breakpoint on address `0x3A43`, so we can check out where our comment is.
+so we can easily put our payload in the comment, but we need to find out where it will be located in memory. We can craft a simple web page and put a breakpoint in the function above. Let's put breakpoint on address `0x3A43`, so we can check out where our comment is.
 
 ![](comment_in_memory.png)
 
 
-As we can see, `esi` register points to our data, so we want to jump to `0x31c54b` (`1\xc5K`), so the `K` will be turned into `k`, which means that the code will jump to `0x31c56b`. We can handle that by putting bunch of `nop`s in our payload. We also want to load a file into memory, so we have to use some syscalls to do it. Quick look at the docs reveals needed syscall:
+As we can see, `esi` register points to our data, so we want to jump to `0x31c54b` (`1\xc5K`), so the `K` will be turned into `k`, which means that the code will jump to `0x31c56b`. We can handle that by putting a bunch of `nop`s in our payload. We also want to load a file into memory, so we have to use some syscalls to do it. Quick look at the docs reveals needed syscall:
 
 ```
 ======================================================================
@@ -206,7 +206,7 @@ Remarks:
     subfunction 11.  
 ```
 
-Code for crafting the payload has the following form (it is also available on my [github](https://github.com/rivit98/ctf-writeups/tree/master/hxpctf_2022/browser_insanity)):
+Code for crafting the payload has the following form (it is also available on my [GitHub](https://github.com/rivit98/ctf-writeups/tree/master/hxpctf_2022/browser_insanity)):
 
 ```python
 from pwn import *
@@ -243,7 +243,7 @@ Now launching `WebView` under the debugger and stepping a little over the code c
 
 ![](flag_loaded.png)
 
-Now it is time to exfiltrate the flag. We know that the VM has access to the internet, so we can make HTTP request with flag as a parameter. I've found useful function which can do work for us:
+Now it is time to exfiltrate the flag. We know that the VM has access to the internet, so we can make HTTP request with a flag as a parameter. I've found a useful function which can do work for us:
 
 ```c
 bool GetUrl(dword _http_url)
@@ -263,7 +263,7 @@ bool GetUrl(dword _http_url)
 }
 ```
 
-Actually, we will use only `http.get` function. Quick check in IDA reveals that address where we need to jump is: `0x1137c`, so we just need to create the url for HTTP request. Final exploit generator looks like this:
+Actually, we will use only `http.get` function. Quick check in IDA reveals that address where we need to jump is: `0x1137c`, so we just need to create the url for HTTP request. The Final exploit generator looks like this:
 
 ```python
 from pwn import *
@@ -328,4 +328,4 @@ And after continuing, we see that something hit the web server :)
 
 ## Summary
 
-This was the first time I exploited a custom OS and it was a great experience. I feel like the WebView browser is damn buggy and there are multiple ways to get code execution. Overall it was a good challenge, I enjoyed solving it.
+This was the first time I exploited a custom OS, and it was a great experience. I feel like the WebView browser is a damn buggy, and there are multiple ways to get code execution. Overall, it was a good challenge; I enjoyed solving it.

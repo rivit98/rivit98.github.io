@@ -1,5 +1,5 @@
 # site description
-description = "Rivit's blog | ctf writeups, research and findings"
+description = "Rivit's blog | ctf writeups, security research and findings"
 
 # site default theme ("light", "dark", "black", "auto")
 defaultTheme = "auto"
