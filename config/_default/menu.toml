@@ -1,42 +1,33 @@
 [[main]]
+  identifier = "home"
+  name = "Home"
+  url = "/"
+  weight = 1
+[[main]]
   identifier = "posts"
   name = "Posts"
   url = "/posts/"
-  title = ""
-  weight = 1
+  weight = 2
 [[main]]
   identifier = "categories"
   name = "Categories"
   url = "/categories/"
-  title = ""
-  weight = 2
-[[main]]
-  identifier = "tags"
-  name = "Tags"
-  url = "/tags/"
-  title = ""
   weight = 3
 [[main]]
   identifier = "github"
   pre = "<i class='fab fa-github fa-fw'></i>"
-  post = ""
-  name = ""
   url = "https://github.com/rivit98"
   title = "GitHub"
   weight = 4
 [[main]]
   identifier = "twitter"
   pre = "<i class='fab fa-twitter fa-fw'></i>"
-  post = ""
-  name = ""
   url = "https://twitter.com/rivit98"
   title = "Twitter"
   weight = 5
 [[main]]
   identifier = "rss"
   pre = "<i class='fas fa-rss fa-fw'></i>"
-  post = ""
-  name = ""
   url = "/index.xml"
   title = "RSS"
   weight = 6

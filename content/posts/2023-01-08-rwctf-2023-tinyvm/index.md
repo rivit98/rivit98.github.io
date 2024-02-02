@@ -3,10 +3,6 @@ title: "Real World CTF 5th - tinyvm (pwn)"
 description: VM pwning
 date: 2023-01-08T13:02:33Z
 categories:
-    - ctf
-    - writeup
-    - pwn
-tags:
     - pwn
     - vm
     - rwctf

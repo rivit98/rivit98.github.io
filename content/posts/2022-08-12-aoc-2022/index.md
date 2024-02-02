@@ -4,9 +4,6 @@ description: Learning Rust basics by doing AoC
 date: 2022-12-08T20:14:48Z
 categories:
     - rust
-    - aoc
-tags:
-    - rust
     - advent of code
 
 ---

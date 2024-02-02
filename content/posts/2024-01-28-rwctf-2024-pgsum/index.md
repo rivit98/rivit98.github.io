@@ -3,10 +3,6 @@ title: "Real World CTF 6th - pgsum (pwn)"
 description: postgres pwning
 date: 2024-01-28T21:24:12Z
 categories:
-    - ctf
-    - writeup
-    - pwn
-tags:
     - pwn
     - rwctf
     - ctf
