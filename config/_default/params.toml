@@ -31,7 +31,7 @@ cacheRemoteImages = false
 [footer]
   enable = true
   # whether to show Hugo and theme info
-  hugo = true
+  hugo = false
   # whether to show copyright info
   copyright = true
   # whether to show the author
@@ -39,7 +39,7 @@ cacheRemoteImages = false
   # site creation time
   since = 2021
   # license info (HTML format is supported)
-  license= '<a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>'
+  license= 'Rivit'
 
 # Section (all posts) page config
 [section]

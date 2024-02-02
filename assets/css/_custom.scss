@@ -1,3 +1,10 @@
-.single img {
-    width: 100%;
+// disable animations
+:root {
+    --animate-duration: 0 !important;
+}
+
+
+// justify post content
+.single .content p {
+    text-align: justify;
 }
