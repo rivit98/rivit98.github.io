@@ -1,5 +1,5 @@
 # site description
-description = "Rivit's blog | ctf writeups, security research and findings"
+description = "Rivit's blog"
 
 # site default theme ("light", "dark", "black", "auto")
 defaultTheme = "auto"
@@ -25,8 +25,7 @@ cacheRemoteImages = false
     name = "Rivit's blog"
     # whether to use typeit animation for title name
     typeit = false
-
-    post = "<span style='font-size:0.6em;font-weight:normal'> ctf writeups, research and findings</span>"
+    post = ""
 
 # Footer config
 [footer]
@@ -154,7 +153,7 @@ cacheRemoteImages = false
     images = []
     # Publisher info
     [page.seo.publisher]
-      name = "xxxx"
+      name = "Rivit"
       logoUrl = "/img/avatar.webp"
   # Related content config
   [page.related]
@@ -252,17 +251,17 @@ cacheRemoteImages = false
   rss = 10
   # Home page profile
   [home.profile]
-    enable = false
+    enable = true
     # Gravatar Email for preferred avatar in home page
     gravatarEmail = ""
     # URL of avatar shown in home page
-    avatarURL = ""
+    avatarURL = "/img/avatar.webp"
     # URL the avatar links to
     avatarLinkURL = ""
     # title shown in home page (HTML format is supported)
-    title = ""
+    title = "Rivit"
     # subtitle shown in home page
-    subtitle = ""
+    subtitle = "ctf writeups, security research and findings"
     # whether to use typeit animation for subtitle
     typeit = false
     # whether to show social links
@@ -274,3 +273,10 @@ cacheRemoteImages = false
     enable = true
     # special amount of posts in each home posts page
     paginate = 10
+
+
+[social]
+  Email = "albert98g@gmail.com"
+  GitHub = "rivit98"
+  RSS = true
+  Twitter = "rivit98"

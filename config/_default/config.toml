@@ -12,7 +12,7 @@ enableRobotsTXT = true
 # whether to use git commit log
 enableGitInfo = false
 # whether to use emoji code
-enableEmoji = true
+enableEmoji = false
 
 # ignore some build errors
 # ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]

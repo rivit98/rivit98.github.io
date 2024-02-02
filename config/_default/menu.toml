@@ -13,21 +13,3 @@
   name = "Categories"
   url = "/categories/"
   weight = 3
-[[main]]
-  identifier = "github"
-  pre = "<i class='fab fa-github fa-fw'></i>"
-  url = "https://github.com/rivit98"
-  title = "GitHub"
-  weight = 4
-[[main]]
-  identifier = "twitter"
-  pre = "<i class='fab fa-twitter fa-fw'></i>"
-  url = "https://twitter.com/rivit98"
-  title = "Twitter"
-  weight = 5
-[[main]]
-  identifier = "rss"
-  pre = "<i class='fas fa-rss fa-fw'></i>"
-  url = "/index.xml"
-  title = "RSS"
-  weight = 6
