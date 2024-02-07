@@ -1,6 +1,6 @@
 ---
 title: "hxp 2022 - browser_insanity (pwn)"
-description: KalibriOS browser pwning
+description: Pwning KalibriOS browser - writeup
 date: 2023-03-13T19:19:48Z
 categories:
     - pwn

@@ -1,6 +1,6 @@
 ---
 title: Advent of code 2022
-description: Learning Rust basics by doing AoC
+description: Learning Rust basics
 date: 2022-12-08T20:14:48Z
 categories:
     - rust

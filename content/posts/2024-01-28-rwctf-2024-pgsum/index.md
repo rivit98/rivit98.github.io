@@ -1,6 +1,6 @@
 ---
 title: "Real World CTF 6th - pgsum (pwn)"
-description: postgres pwning
+description: Pwning postgres 12.17 - writeup
 date: 2024-01-28T21:24:12Z
 categories:
     - pwn

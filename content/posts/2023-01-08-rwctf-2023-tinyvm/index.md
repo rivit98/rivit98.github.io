@@ -1,6 +1,6 @@
 ---
 title: "Real World CTF 5th - tinyvm (pwn)"
-description: VM pwning
+description: Pwning a VM - writeup
 date: 2023-01-08T13:02:33Z
 categories:
     - pwn
