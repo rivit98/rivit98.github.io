@@ -8,3 +8,8 @@
 .single .content p {
     text-align: justify;
 }
+
+// summary on main page
+.home[posts] .summary .content {
+    color: gray !important;
+}
