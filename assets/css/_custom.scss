@@ -13,3 +13,13 @@
 .home[posts] .summary .content {
     color: gray !important;
 }
+
+// disable tags wrapping
+.post-category > a {
+    white-space: nowrap;
+}
+
+// disable date wrapping
+.post-footer > .post-publish > time {
+    white-space: nowrap;
+}
