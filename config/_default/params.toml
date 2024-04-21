@@ -79,8 +79,6 @@ cacheRemoteImages = false
   ruby = false
   # whether to enable the fraction extended syntax
   fraction = false
-  # whether to enable the fontawesome extended syntax
-  fontawesome = true
   # whether to show link to Raw Markdown content of the content
   linkToMarkdown = false
   # whether to show the full text content in RSS
