@@ -1,4 +1,4 @@
-FROM jakejarvis/hugo-extended:latest as builder
+FROM hugomods/hugo:latest:latest as builder
 
 WORKDIR /app
 COPY . .
