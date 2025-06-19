@@ -2,7 +2,7 @@
 description = "Rivit's blog"
 
 # site default theme ("light", "dark", "black", "auto")
-defaultTheme = "auto"
+defaultTheme = "dark"
 # date format
 dateFormat = "2006-01-02"
 # enable PWA
