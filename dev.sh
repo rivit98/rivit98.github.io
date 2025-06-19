@@ -1,3 +1,4 @@
 #!/bin/bash
 
-docker run -it --rm -v $(pwd):/w -w /w -p 1313:13337 --name blog-builder hugomods/hugo:latest server --disableFastRender --bind 0.0.0.0 -p 13337
+docker build -t blog-builder -f Dockerfile.dev .
+docker run -it --rm -v $(pwd):/w -w /w -p 13337:13337 --name blog-builder blog-builder hugo server --disableFastRender --bind 0.0.0.0 -p 13337
