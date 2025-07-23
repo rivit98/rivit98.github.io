@@ -202,7 +202,7 @@ Remarks:
     subfunction 11.  
 ```
 
-Code for crafting the payload has the following form (it is also available on my [GitHub](https://github.com/rivit98/ctf-writeups/tree/master/hxpctf_2022/browser_insanity)):
+Code for crafting the payload has the following form (it is also available on my [GitHub](https://github.com/rivit98/ctf-writeups/tree/master/2022/hxpctf/browser_insanity)):
 
 ```python
 from pwn import *

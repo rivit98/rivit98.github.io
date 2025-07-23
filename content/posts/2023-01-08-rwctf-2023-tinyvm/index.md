@@ -895,7 +895,7 @@ push ebx
 rwctf{A_S1gn_In_CHllenge}
 ```
 
-All files can be found [here](https://github.com/rivit98/ctf-writeups/tree/master/realworld_ctf_2022/tinyvm).
+All files can be found [here](https://github.com/rivit98/ctf-writeups/tree/master/2022/realworld_ctf/tinyvm).
 
 ## Summary
 
