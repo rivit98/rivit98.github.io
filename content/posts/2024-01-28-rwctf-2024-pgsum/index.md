@@ -15,7 +15,7 @@ Recently, I participated in RealWorld CTF 6 playing with [justcatthefish](https:
 
 ## Description
 
-![intro](./intro.png)
+![intro](./intro.png "intro")
 
 We have added sum support for string to postgresql! Try it out!  
 ```sql
@@ -53,7 +53,7 @@ After checking them we see that author wants us to pwn `postgres 12.17` that was
 
 Unfortunately code changes weren't provided, so we need to figure them out ourselves. That's easy - just compile `postgres` using `Dockerfile` that author provided and do a binary diff:
 
-![bindiff](./bindiff.png)
+![bindiff](./bindiff.png "bindiff")
 
 There were only two functions added - `char_sum` and `varchar_sum`.
 

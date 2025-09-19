@@ -36,11 +36,11 @@ So basically we are provided with an unmodified [KalibriOS](https://kolibrios.or
 
 To do a bit of reconnaissance, I started the VM using slightly modified `run_vm.sh` script which loads the `kolibri.img` and looked around. After booting, we see:
 
-![](kolibrios_main.png)
+![kolibrios_main](kolibrios_main.png "kolibrios_main")
 
 There is also a built-in debugger:
 
-![](kolibri_debug.png)
+![kolibri_debug](kolibri_debug.png "kolibri_debug")
 
 We can load programs into it using `load` command, so in order to debug webview we can run `load /sys/network/webview`. After loading a program, we see 32bit assembly :) I've experimented with it for a little, and it looks like all memory is executable, if we had control over `ebp`, we could execute arbitrary code. Sounds good.
 
@@ -130,15 +130,15 @@ Let's create a simple `index.html` page with a super long `meta` element with `h
 
 Now we need to host the page somewhere, run the WebView under the debugger and visit the page.
 
-![](webview_crash.png)
+![webview_crash](webview_crash.png "webview_crash")
 
 Page fault! Now we need to somehow check what happened and where. To do so, it would be good to set breakpoint before call to faulty `strcpy`. I found the binary in `/sys/network` but I couldn't disassemble it. After a little bit of googling I figured out that it is packed by tool called `kpack`, so to unpack it I used [kunpack,](http://board.kolibrios.org/viewtopic.php?f=6&t=1954#p38497) and then I was able to load it into disassembler (binary does not have symbols). After a while I had the address when binary is calling our `strcpy` - 0x6a8b, so we can easily put the breakpoint there (no ASLR here!) and inspect where data is being copied.
 
-![](strcpy_debug.png)
+![strcpy_debug](strcpy_debug.png "strcpy_debug")
 
 `edi` points to our `#redirect` field, `esi` points data to be copied. Notice that `esp` is not that far from `edi`, so maybe we can somehow overflow the stack? Crafting another `.html` file with a `content` value set to `url`+`58610*'A'` should overflow the return address from `strcpy`. 
 
-![](stack_overflow.png)
+![stack_overflow](stack_overflow.png "stack_overflow")
 
 We have it - we are controlling, so now when code does a `ret` from `strcpy` it jumps to `0x41414141`. You can immediately think about smuggling a malicious code in our tag, but unfortunately it cannot contain a null byte, because `strcpy` will stop reading it further and even if the payload would be null-less, tag value is "lowerized" (`strlwr`) - dead end? 
 
@@ -179,7 +179,7 @@ bool _tag::parse(dword _bufpos, bufend)
 
 so we can easily put our payload in the comment, but we need to find out where it will be located in memory. We can craft a simple web page and put a breakpoint in the function above. Let's put breakpoint on address `0x3A43`, so we can check out where our comment is.
 
-![](comment_in_memory.png)
+![comment_in_memory](comment_in_memory.png "comment_in_memory")
 
 
 As we can see, `esi` register points to our data, so we want to jump to `0x31c54b` (`1\xc5K`), so the `K` will be turned into `k`, which means that the code will jump to `0x31c56b`. We can handle that by putting a bunch of `nop`s in our payload. We also want to load a file into memory, so we have to use some syscalls to do it. Quick look at the docs reveals needed syscall:
@@ -234,10 +234,10 @@ with open("index.html2", 'wb') as f:
 
 Now launching `WebView` under the debugger and stepping a little over the code confirms that the exploit works and flag was loaded into memory.
 
-![](code_execution.png)
+![code_execution](code_execution.png "code_execution")
 
 
-![](flag_loaded.png)
+![flag_loaded](flag_loaded.png "flag_loaded")
 
 Now it is time to exfiltrate the flag. We know that the VM has access to the internet, so we can make HTTP request with a flag as a parameter. I've found a useful function which can do work for us:
 
@@ -308,15 +308,15 @@ with open("index.html2", 'wb') as f:
 
 Let's run the browser and put breakpoint before `http.get` call.
 
-![](before_http_call.png)
+![before_http_call](before_http_call.png "before_http_call")
 
 And after continuing, we see that something hit the web server :)
 
-![](local_flag.png)
+![local_flag](local_flag.png "local_flag")
 
 ### Running the exploit on a remote
 
-![](flag_remote.png)
+![flag_remote](flag_remote.png "flag_remote")
 
 
 `hxp{wHy_h4cK_Chr0m3_wh3n_y0u_c4n_hAcK_BROWSER}`

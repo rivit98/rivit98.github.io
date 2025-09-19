@@ -15,7 +15,7 @@ This week was an exhilarating one as I had the opportunity to take part in the r
 
 ## Description
 
-![](chall_desc.png)
+![chall_desc](chall_desc.png "chall_desc")
 
 So basically we are provided with an unmodified [source code](https://github.com/jakogut/tinyvm) (commit `10c25d83e442caf0c1fc4b0ab29a91b3805d72ec`), and we need to pwn it!
 Remote accepts a text input which is our VM program written in [assembly](https://github.com/jakogut/tinyvm/blob/master/SYNTAX) (example [primes.vm](https://github.com/jakogut/tinyvm/blob/master/programs/tinyvm/primes.vm))
