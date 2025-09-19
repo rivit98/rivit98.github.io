@@ -90,7 +90,7 @@ cacheRemoteImages = false
   # whether to enable word count
   enableWordCount = false
   # whether to enable reading time estimation
-  enableReadingTime = true
+  enableReadingTime = false
 
   # Display a message at the beginning of an article to warn the reader that its content might be outdated.
   [page.toc]
