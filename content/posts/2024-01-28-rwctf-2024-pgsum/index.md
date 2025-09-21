@@ -4,10 +4,8 @@ description: Pwning postgres 12.17 - writeup
 date: 2024-01-28T21:24:12Z
 categories:
     - pwn
-    - rwctf
     - ctf
     - writeup
-    - binexp
     - postgres
 ---
 

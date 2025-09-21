@@ -22,8 +22,6 @@ languageCode = "en"
 languageName = "English"
 # whether to include Chinese/Japanese/Korean
 hasCJKLanguage = false
-# default amount of posts in each pages
-paginate = 10
 # [UA-XXXXXXXX-X] google analytics code (replaced by params.analytics.google)
 googleAnalytics = "G-P8PM36X0J7"
 
@@ -32,3 +30,25 @@ googleAnalytics = "G-P8PM36X0J7"
   hint = 'text'
   quality = 100
   resampleFilter = 'lanczos'
+
+[pagination]
+  disableAliases = false
+  pagerSize = 10
+  path = "page"
+
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    identifier = "posts"
+    name = "Posts"
+    url = "/posts/"
+    weight = 2
+  [[menu.main]]
+    identifier = "categories"
+    name = "Categories"
+    url = "/categories/"
+    weight = 3

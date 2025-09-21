@@ -3,7 +3,7 @@
 # privacy of the Google Analytics (replaced by params.analytics.google)
 [googleAnalytics]
   # ...
-[twitter]
+[x]
   enableDNT = true
 [youtube]
   privacyEnhanced = true

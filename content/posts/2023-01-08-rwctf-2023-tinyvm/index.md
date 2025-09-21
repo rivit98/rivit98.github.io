@@ -5,10 +5,8 @@ date: 2023-01-08T13:02:33Z
 categories:
     - pwn
     - vm
-    - rwctf
     - ctf
     - writeup
-    - binexp
 ---
 
 This week was an exhilarating one as I had the opportunity to take part in the renowned [Real World CTF 5th](https://ctftime.org/event/1797) event. Among the various mind-bending challenges I encountered, one particularly intriguing puzzle called tinyvm caught my attention. This challenge involved delving into the realm of VM pwn, as we set out on a quest to successfully spawn a shell on a remote target. Here is my writeup for it.

@@ -8,7 +8,6 @@ categories:
     - hxp
     - ctf
     - writeup
-    - binexp
 ---
 
 

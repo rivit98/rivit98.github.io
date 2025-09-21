@@ -1,4 +1,0 @@
-# Options to make output .md files
-
-["text/plain"]
-  suffixes = ["md"]

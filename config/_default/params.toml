@@ -1,16 +1,13 @@
 # site description
 description = "Rivit's blog"
 
+[author]
+  name = "Rivit"
+
 # site default theme ("light", "dark", "black", "auto")
 defaultTheme = "dark"
 # date format
 dateFormat = "2006-01-02"
-# enable PWA
-enablePWA = false
-# [Experimental] Bundle js
-bundle = false
-# [Experimental] cache remote images, more info: https://github.com/HEIGE-PCloud/DoIt/pull/860#issue-1574342372
-cacheRemoteImages = false
 # Header config
 [header]
   # desktop header mode ("fixed", "normal", "auto")
@@ -39,7 +36,7 @@ cacheRemoteImages = false
   # site creation time
   since = 2021
   # license info (HTML format is supported)
-  license= 'Rivit'
+  license= ''
 
 # Section (all posts) page config
 [section]
@@ -83,8 +80,6 @@ cacheRemoteImages = false
   linkToMarkdown = false
   # whether to show the full text content in RSS
   rssFullText = false
-  # whether to enable series navigation
-  seriesNavigation = true
   # whether to enable last modified time
   enableLastMod = false
   # whether to enable word count
@@ -137,14 +132,14 @@ cacheRemoteImages = false
   # Social share links in post page
   [page.share]
     enable = true
-    Facebook = true
+    Threads = true
     HackerNews = true
     Linkedin = true
     Reddit = true
     Telegram = true
     Twitter = true
     Mastodon = true
-  
+
   # Page SEO config
   [page.seo]
     # image URL
@@ -157,17 +152,6 @@ cacheRemoteImages = false
   [page.related]
     enable = false
     count = 5
-
-# TypeIt config
-[typeit]
-  # typing speed between each step (measured in milliseconds)
-  speed = 100
-  # blinking speed of the cursor (measured in milliseconds)
-  cursorSpeed = 1000
-  # character used for the cursor (HTML format is supported)
-  cursorChar = "|"
-  # cursor duration after typing finishing (measured in milliseconds, "-1" means unlimited)
-  duration = -1
 
 # Site verification code for Google/Bing/Yandex/Pinterest/Baidu
 [verification]
@@ -216,9 +200,9 @@ cacheRemoteImages = false
 
 # Search config
 [search]
-  enable = false
+  enable = true
   # type of search engine ("algolia", "fuse")
-  type = "fuse"
+  type = "algolia"
   # max index length of the chunked content
   contentLength = 4000
   # placeholder of the search bar
@@ -242,6 +226,27 @@ cacheRemoteImages = false
     ignoreLocation = true
     useExtendedSearch = false
     ignoreFieldNorm = false
+
+  [search.algolia]
+      index = ""
+      appID = ""
+      searchKey = ""
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  page = ["HTML", "MarkDown"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML", "RSS"]
+
+# Options to make output .md files
+[outputFormats.MarkDown]
+  mediaType = "text/plain"
+  isPlainText = true
+  isHTML = false
+
+[mediaTypes]
+  [mediaTypes."text/plain"]
+    suffixes = ["md"]
 
 # Home page config
 [home]
@@ -279,3 +284,10 @@ cacheRemoteImages = false
   RSS = true
   Twitter = "rivit98"
   Discord = "513014269932077067"
+
+
+[image]
+  # image lazy loading
+  false = true
+  # image gallery support
+  gallery = false
