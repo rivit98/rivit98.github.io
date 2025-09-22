@@ -9,8 +9,14 @@ COPY . .
 
 RUN hugo --gc --minify --environment production
 
+FROM node:latest as pagefind
+
+WORKDIR /app
+COPY --from=builder /app/public /app/public
+RUN npx pagefind --site /app/public/
+
 
 FROM httpd:latest
 
-COPY --from=builder /app/public /usr/local/apache2/htdocs/
+COPY --from=pagefind /app/public /usr/local/apache2/htdocs/
 RUN chown -R www-data:www-data /usr/local/apache2/htdocs/

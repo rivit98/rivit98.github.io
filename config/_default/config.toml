@@ -25,12 +25,6 @@ hasCJKLanguage = false
 # [UA-XXXXXXXX-X] google analytics code (replaced by params.analytics.google)
 googleAnalytics = "G-P8PM36X0J7"
 
-[imaging]
-  anchor = 'Smart'
-  hint = 'text'
-  quality = 100
-  resampleFilter = 'lanczos'
-
 [pagination]
   disableAliases = false
   pagerSize = 10
