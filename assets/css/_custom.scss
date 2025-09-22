@@ -26,3 +26,24 @@
 figcaption.image-caption {
     display: none !important;
 }
+
+html.dark {
+    --fgColor-default: #a9a9b3; // global-font-color
+    --fgColor-secondary: #b5b5b5; // global-font-secondary-color
+    --fgColor-link: #55bde2; // single-link-color
+    --fgColor-link-hover: #bdebfc; // single-link-hover-color
+    --fgColor-muted: #848d97; // pipe between categories and search icon
+
+    --bgColor-default: #292a2d; // global-background-color
+    --bgColor-secondary: #252627; // header-background-color
+    
+    --borderColor-default: #363636;
+    --selection-bgColor: rgba(50, 112, 194, 0.4);
+
+    --button-default-bgColor-rest: #363636;
+    --button-default-bgColor-hover: #363636;
+
+    .single .content code:not(.chroma) {
+        color: #E5BF78;
+    }
+}
