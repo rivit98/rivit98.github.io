@@ -8,6 +8,8 @@
     text-align: justify;
 }
 
+
+
 // summary on main page
 .home[posts] .summary .content {
     color: gray !important;
@@ -46,4 +48,9 @@ html.dark {
     .single .content code:not(.chroma) {
         color: #E5BF78;
     }
+}
+
+// smaller code font size
+.single .content code.chroma {
+    font-size: 0.8rem;
 }
