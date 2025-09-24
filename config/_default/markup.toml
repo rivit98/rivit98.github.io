@@ -14,14 +14,14 @@
 
 [tableOfContents]
 endLevel = 4
-ordered = true
+ordered = false
 startLevel = 2
 
 [highlight]
-noClasses = false
+# noClasses = false
 codeFences = true
-guessSyntax = true
-lineNoStart = 1
-lineNos = true
-lineNumbersInTable = true
-tabWidth = 4
+guessSyntax = false
+
+# https://github.com/alecthomas/chroma/tree/master/styles
+# style="catppuccin-frappe"
+style="monokai"
