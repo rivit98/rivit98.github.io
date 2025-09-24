@@ -34,7 +34,8 @@ html.dark {
     --fgColor-link-hover: #bdebfc; // single-link-hover-color
     --fgColor-muted: #848d97; // pipe between categories and search icon
 
-    --bgColor-default: #292a2d; // global-background-color
+    --bgColor-default: #1e1f21; // global-background-color
+    // --bgColor-default: #292a2d; // global-background-color
     --bgColor-secondary: #252627; // header-background-color
     
     --borderColor-default: #363636;
@@ -45,6 +46,7 @@ html.dark {
 
     .single .content code:not(.chroma) {
         color: #E5BF78;
+        white-space: nowrap;
     }
 }
 

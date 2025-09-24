@@ -118,26 +118,14 @@ dateFormat = "2006-01-02"
   # KaTeX mathematical formulas config (KaTeX https://katex.org/)
   [page.math]
     enable = false
-    # default block delimiter is $$ ... $$ and \\[ ... \\]
-    blockLeftDelimiter = ""
-    blockRightDelimiter = ""
-    # default inline delimiter is $ ... $ and \\( ... \\)
-    inlineLeftDelimiter = ""
-    inlineRightDelimiter = ""
-    # KaTeX extension copy_tex
-    copyTex = true
-    # KaTeX extension mhchem
-    mhchem = false
- 
+
   # Social share links in post page
   [page.share]
     enable = true
-    Threads = true
     HackerNews = true
-    Linkedin = true
     Reddit = true
-    Telegram = true
     Twitter = true
+    # X = true # TODO: make a PR
     Mastodon = true
 
   # Page SEO config
@@ -274,7 +262,7 @@ dateFormat = "2006-01-02"
   Email = "albert98g@gmail.com"
   GitHub = "rivit98"
   RSS = true
-  Twitter = "rivit98"
+  X = "rivit98"
   Discord = "513014269932077067"
 
 

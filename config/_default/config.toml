@@ -43,6 +43,6 @@ googleAnalytics = "G-P8PM36X0J7"
     weight = 2
   [[menu.main]]
     identifier = "categories"
-    name = "Categories"
+    name = "Tags"
     url = "/categories/"
     weight = 3
