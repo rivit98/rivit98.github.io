@@ -27,6 +27,10 @@ figcaption.image-caption {
     display: none !important;
 }
 
+.single .content code:not(.chroma) {
+    white-space: nowrap;
+}
+
 html.dark {
     --fgColor-default: #a9a9b3; // global-font-color
     --fgColor-secondary: #b5b5b5; // global-font-secondary-color
