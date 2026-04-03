@@ -14,7 +14,7 @@ I spent some time fuzzing [libfyaml](https://github.com/pantoniou/libfyaml), a f
 
 libfyaml is a YAML library that supports YAML 1.2. It provides a pretty extensive API - parsing, emitting, path expressions, document manipulation, a reflection/type system, and more. It's written in C, which makes it a great candidate for fuzzing with sanitizers.
 
-The library has a lot of surface area. Beyond basic parse/emit, there are features like ypath expressions, document iterators, alias resolution, node manipulation (insert, remove, sort), and a whole reflection system for mapping YAML to C types. Plenty of code paths to explore.
+The library has a lot of surface area. Beyond basic parse/emit, there are features like path queries, document traversal, alias resolution, tree manipulation (insert, remove, sort), and a whole reflection system for mapping YAML to C types. Plenty of code paths to explore.
 
 ## Tooling
 
@@ -45,9 +45,9 @@ The header occupies the first 36 bytes of the input. It's a struct of 9 `uint32_
 struct seed_data_t {
   uint32_t seed1;  // parser flags
   uint32_t seed2;  // emitter flags
-  uint32_t seed3;  // node walk flags
-  uint32_t seed4;  // path parse flags
-  uint32_t seed5;  // node style
+  uint32_t seed3;  // traversal flags
+  uint32_t seed4;  // path query parser flags
+  uint32_t seed5;  // output style
   uint32_t seed6;  // extended emitter flags
   uint32_t seed7;  // primitive type selection
   uint32_t seed8;  // type info flags
@@ -56,42 +56,19 @@ struct seed_data_t {
 } __attribute__((aligned(16)));
 ```
 
-- **seed1** - parser flags (YAML version, document resolution, recycling, accelerators, depth limits, JSON mode, ypath aliases, duplicate keys, ...)
-- **seed2** - emitter flags (sort keys, output mode like block/flow/JSON/pretty, indentation, width, doc start/end markers, ...)
-- **seed3** - node walk flags (follow mode, pointer type like YAML/JSON/ypath, URI encoding, max depth, ...)
-- **seed4** - path expression parser flags (recycling, accelerators)
-- **seed5** - node style (any, flow, block, plain, single/double quoted, literal, folded, alias)
+- **seed1** - parser flags (YAML version, document resolution, caching, depth limits, JSON mode, alias expansion, duplicate key handling, ...)
+- **seed2** - emitter flags (sort keys, output mode like block/flow/JSON/pretty, indentation, width, document markers, ...)
+- **seed3** - traversal flags (follow mode, pointer type like YAML/JSON/path query, URI encoding, max depth, ...)
+- **seed4** - path query parser flags (caching, performance optimizations)
+- **seed5** - output style (any, flow, block, plain, single/double quoted, literal, folded, alias)
 - **seed6** - extended emitter flags (color, visible whitespace, extended indicators, ...) with output destination bits masked off to avoid side effects
 - **seed7** - primitive type selection (bool, char, int, float, double, etc. - for the reflection system)
-- **seed8** - type info flags (const, volatile, restrict, anonymous, incomplete, ...)
+- **seed8** - type qualifier flags (const, volatile, restrict, anonymous, incomplete, ...)
 - **seed9** - C code generation flags (indentation style, comment format)
 
-The `setup_flags` function translates these raw seeds into the actual flag values used by the library:
+A setup function translates these raw seeds into the actual flag values used by the library. Most seeds are used directly as bitmasks. For enum-like fields (output style, primitive type, C generation flags), the seed is taken modulo the number of valid values to pick one from a predefined list. The extended emitter flags mask off output destination bits to avoid side effects like writing to stdout/stderr/files during fuzzing. This means the coverage-guided engine has a direct, transparent mapping between input bytes and every configuration bit. When the fuzzer mutates bytes 0-35, it's directly toggling library features.
 
-```c
-void setup_flags(struct seed_data_t *seed_data, struct flags_t *flags) {
-  flags->parse_flags      = seed_data->seed1;
-  flags->emitter_flags    = seed_data->seed2;
-  flags->node_walk_flags  = seed_data->seed3;
-  flags->path_parse_flags = seed_data->seed4;
-  flags->node_style       = fy_node_style__vals[seed_data->seed5 % array_elements(fy_node_style__vals)];
-  flags->extended_emitter_flags = seed_data->seed6 & ~(
-        FYEXCF_OUTPUT_STDOUT
-      | FYEXCF_OUTPUT_STDERR
-      | FYEXCF_OUTPUT_FILE
-      | FYEXCF_OUTPUT_FD
-      | FYEXCF_NULL_OUTPUT
-      | FYEXCF_OUTPUT_FILENAME
-    );
-  flags->primitive_type = primitive_type_names[seed_data->seed7 % array_elements(primitive_type_names)];
-  flags->type_info_flags = seed_data->seed8;
-  flags->cgen_flag = cgen_flag_combos[seed_data->seed9 % array_elements(cgen_flag_combos)];
-}
-```
-
-Most seeds are used directly as bitmasks - the raw `uint32_t` value is passed as the flag set. For enum-like fields (node style, primitive type, C generation flags), the seed is taken modulo the number of valid values to pick one from a predefined list. The extended emitter flags mask off output destination bits to avoid side effects like writing to stdout/stderr/files during fuzzing. This means the coverage-guided engine has a direct, transparent mapping between input bytes and every configuration bit. When the fuzzer mutates bytes 0-35, it's directly toggling library features.
-
-In `LLVMFuzzerTestOneInput`, the header is extracted at the start of each iteration:
+In the fuzzer entry point, the header is extracted at the start of each iteration:
 
 ```c
 int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
@@ -106,42 +83,27 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
   data += sizeof(struct seed_data_t);
   size -= sizeof(struct seed_data_t);
 
-  // ... run all test functions with remaining data ...
+  // ... run all tests with remaining data ...
 }
 ```
 
-Everything after byte 36 is the fuzz data - the YAML content. For string-based APIs, this data is null-terminated before being passed to the library. For binary/file-pointer APIs, the raw bytes are passed directly via `fmemopen`.
+Everything after byte 36 is the fuzz data - the YAML content. For string-based APIs, this data is null-terminated before being passed to the library. For binary/file-pointer APIs, the raw bytes are passed directly as an in-memory file stream.
 
 ### Why this approach
 
-The main reason I went with a header-based design instead of, say, using `FuzzedDataProvider` to consume bytes on the fly, is **transparency for the fuzzing engine**. With a fixed-offset header, libFuzzer can directly correlate specific byte positions with specific code coverage changes. If flipping bit 3 at offset 0 enables `FYPCF_RESOLVE_DOCUMENT` and that opens up a new code path, the fuzzer learns that immediately. With a stream-based approach, the relationship between byte positions and their effects shifts depending on how many bytes were consumed before, which makes it harder for the engine to learn.
+The main reason I went with a header-based design instead of, say, using `FuzzedDataProvider` to consume bytes on the fly, is **transparency for the fuzzing engine**. With a fixed-offset header, libFuzzer can directly correlate specific byte positions with specific code coverage changes. If flipping a bit at offset 0 enables a feature like document resolution and that opens up a new code path, the fuzzer learns that immediately. With a stream-based approach, the relationship between byte positions and their effects shifts depending on how many bytes were consumed before, which makes it harder for the engine to learn.
 
 It also keeps things simple. The struct layout is fixed, so reproducing a crash is trivial - just look at the first 36 bytes to know exactly what configuration was active.
 
-### Test functions
-
-On each iteration, the harness runs through 35+ test functions sequentially, covering:
-
-- **Parsing** - from strings, from file pointers
-- **Emitting** - to file pointers, strings, buffers, via emitter objects
-- **Document operations** - cloning, comparing, inserting, removing, scanf
-- **Path expressions** - building, executing, taking results
-- **Iterators** - document, node, and token iteration
-- **Alias resolution** - with various ypath configurations
-- **Reflection/type system** - packed blobs, type lookups, C code generation, type context parsing and emitting
-- **Other operations** - composition, checkpoint/rollback, sequence and mapping manipulation
-
-Every test function runs on every input. This means the fuzzer doesn't need to "discover" how to select a target - it just hammers everything at once.
-
 ### Disadvantages
 
-This approach has real downsides. Running all 35+ test functions on every input is slow. Each fuzzer iteration does a lot of redundant work - most test functions will likely reject or quickly bail out on an input that was really only useful for one or two of them. This directly hurts the executions-per-second metric, which is one of the most important factors in fuzzing effectiveness.
+This approach has real downsides. Running 35+ tests on every input is slow. Each fuzzer iteration does a lot of redundant work - most tests will likely reject or quickly bail out on an input that was really only useful for one or two of them. This directly hurts the executions-per-second metric, which is one of the most important factors in fuzzing effectiveness.
 
 There's also the fixed header overhead. Every input must be at least 37 bytes long (36 for the header + at least 1 byte of data), and the first 36 bytes are always "spent" on configuration rather than actual YAML content. For a library where interesting bugs can hide in short, carefully crafted inputs, wasting 36 bytes on a header is not ideal. The fuzzer has to work harder to find minimally-sized triggering inputs.
 
-Another issue is that the same fuzz data is shared across all test functions with wildly different expectations. A path expression parser expects something like `/foo/bar`, while the YAML parser expects valid YAML, and the reflection system expects packed binary blobs. The same input can't realistically be good for all of them at once, so most test functions end up exercising only their error/early-exit paths for any given input.
+Another issue is that the same fuzz data is shared across all tests with wildly different expectations. A path query parser expects something like `/foo/bar`, while the YAML parser expects valid YAML, and the reflection system expects packed binary blobs. The same input can't realistically be good for all of them at once, so most tests end up exercising only their error/early-exit paths for any given input.
 
-A more disciplined approach would be to write separate harnesses per feature group, or at least use the header to dispatch to a single test function per iteration. That said, the brute-force approach worked well enough here - it found 68 bugs, so I can't complain too much.
+A more disciplined approach would be to write separate harnesses per feature group, or at least use the header to dispatch to a single test per iteration. That said, the brute-force approach worked well enough here - it found 68 bugs, so I can't complain too much.
 
 ## Findings
 
