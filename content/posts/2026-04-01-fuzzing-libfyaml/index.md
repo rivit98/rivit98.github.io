@@ -147,49 +147,21 @@ A more disciplined approach would be to write separate harnesses per feature gro
 
 In total, I reported **68 issues** to the libfyaml GitHub repository. All of them have been acknowledged and fixed by the maintainer. Here's a breakdown by category:
 
-#### Heap-use-after-free (26 issues)
-
-By far the most common class of bugs, making up over a third of all findings. These showed up across many different subsystems - node freeing, emitting, path expression execution and walk results, input reference counting, document iterators, alias resolution, accelerator lookups, and list operations. This category also includes a double-free in `fy_input_free`. ASan caught all of these.
-
-#### Memory leaks (16 issues)
-
-The second most common category. Various places where allocated memory wasn't properly freed on error paths or during cleanup. These appeared in parsing, emitting, path expression building, node building from strings and file pointers, alias resolution, atom iteration, input allocation, and the reflection type system.
-
-#### Buffer overflows (9 issues)
-
-Heap buffer overflows, stack buffer overflows, global buffer overflows, and out-of-bounds accesses. These showed up in the accelerator growth function, UTF-8 handling (`fy_utf8_get`, `fy_utf8_get_branch`, `fy_utf8_get_generic`), path traversal with `StrtolFixAndCheck`, emitter setup, and token text preparation.
-
-#### Undefined behavior (7 issues)
-
-Caught by UBSan. These included converting infinity to an integer type, shifts or operations on signed integers that triggered overflow, misaligned memory access in the bundled xxhash implementation, and similar issues in the emitter and atom handling code.
-
-#### Null dereference / SIGSEGV (4 issues)
-
-Segmentation faults from null pointer dereferences in path expression building, atom line iteration, and reader input generation - triggered by specific flag combinations like `FYPCF_RESOLVE_DOCUMENT` with `FYPCF_YPATH_ALIASES`.
-
-#### Stack overflows (2 issues)
-
-Infinite recursion triggered by specific combinations of parser flags - particularly when document resolution and ypath aliases were enabled together. Different flag combinations (with disabled recycling vs disabled accelerators) hit different recursion paths.
-
-#### Infinite loops (2 issues)
-
-Cases where the library would hang indefinitely - one in `fy_document_buildf` and one in `fy_check_ref_loop` during document building with alias resolution.
-
-#### Out-of-memory (1 issue)
-
-A case where path expression execution could consume unbounded memory.
-
-#### API/documentation issue (1 issue)
-
-One report was about a function (`fy_token_get_utf8_length`) referenced in documentation that didn't actually exist in the library.
-
----
+- **Heap-use-after-free (26)** - the most common class, appearing across parsing, emitting, path queries, reference counting, iteration, alias handling, and list operations. Includes one double-free.
+- **Memory leaks (16)** - memory not properly freed on error paths or during cleanup, spread across parsing, emitting, path queries, alias handling, and the type reflection system.
+- **Buffer overflows (9)** - heap, stack, and global buffer overflows in internal array resizing, UTF-8 decoding, path traversal, output setup, and token processing.
+- **Undefined behavior (7)** - infinity-to-integer conversions, signed integer overflow, misaligned memory access in a bundled hash function, and related issues in output and text handling.
+- **Null dereference / SIGSEGV (4)** - null pointer dereferences in path query construction, line iteration, and input handling, triggered by specific combinations of parser flags.
+- **Stack overflows (2)** - infinite recursion when document resolution and alias expansion were enabled together.
+- **Infinite loops (2)** - hangs during document construction with alias resolution.
+- **Out-of-memory (1)** - a path query consuming unbounded memory.
+- **API/documentation issue (1)** - a function referenced in the documentation that didn't exist in the library.
 
 All issues were reported with reproducer inputs and sanitizer stack traces. The maintainer was responsive and fixed everything. The full list of reports can be found on the [libfyaml issues page](https://github.com/pantoniou/libfyaml/issues?q=is%3Aissue%20author%3Arivit98).
 
 ## A note on AI
 
-Every single one of these 68 bugs was found without any AI assistance. The fuzzer was written by hand, the triage was done manually, and the reports were filed by a human. No LLMs, no copilots, no AI-guided fuzzing - just libFuzzer, sanitizers, and patience.
+Every single one of these 68 bugs was found without any AI assistance. The fuzzer was written by hand, the triage was done manually, and the reports were filed by a human.
 
 I originally had plans to turn some of the more interesting bugs (particularly the use-after-free ones) into a CTF challenge. But in the current AI era, where LLMs can solve most CTF challenges without much effort, I decided not to waste time on that. It just doesn't feel worth the effort anymore when the solution process can be shortcut so easily.
 
