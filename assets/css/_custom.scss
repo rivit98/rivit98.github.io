@@ -8,8 +8,14 @@
     text-align: justify;
 }
 
+// extra spacing above headers in post content
+.single .content :is(h1, h2, h3, h4, h5, h6) {
+    margin-top: 1.5rem;
+    margin-bottom: 0rem;
+}
+
 // summary on main page
-.home[posts] .summary .content {
+.home[data-posts] .summary .content {
     color: gray !important;
 }
 
