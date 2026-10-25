@@ -1,14 +1,15 @@
 ---
 title: "Fuzzing libfyaml"
-description: Fuzzing a C YAML parsing library with libFuzzer
+description: Fuzzing a C YAML parsing library, first with libFuzzer and then with an AFL++
 date: 2026-04-01T12:00:00Z
 categories:
     - fuzzing
     - security
     - opensource
+    - ai
 ---
 
-I spent some time fuzzing [libfyaml](https://github.com/pantoniou/libfyaml), a feature-rich YAML parser/emitter written in C. I ended up finding and reporting 68 bugs, all of which have been fixed by the maintainer. Here's how it went.
+I spent some time fuzzing [libfyaml](https://github.com/pantoniou/libfyaml), a feature-rich YAML parser/emitter written in C. The first campaign ended with 68 reported bugs, all of which were fixed by the maintainer. I kept going after that, and the approach changed a lot - see the update at the end of the article.
 
 ## Target
 
@@ -103,11 +104,10 @@ There's also the fixed header overhead. Every input must be at least 37 bytes lo
 
 Another issue is that the same fuzz data is shared across all tests with wildly different expectations. A path query parser expects something like `/foo/bar`, while the YAML parser expects valid YAML, and the reflection system expects packed binary blobs. The same input can't realistically be good for all of them at once, so most tests end up exercising only their error/early-exit paths for any given input.
 
-A more disciplined approach would be to write separate harnesses per feature group, or at least use the header to dispatch to a single test per iteration. That said, the brute-force approach worked well enough here - it found 68 bugs, so I can't complain too much.
 
 ## Findings
 
-In total, I reported **68 issues** to the libfyaml GitHub repository. All of them have been acknowledged and fixed by the maintainer. Here's a breakdown by category:
+In total, the first campaign reported **68 issues** to the libfyaml GitHub repository. All of them were acknowledged and fixed by the maintainer. Here's a breakdown by category:
 
 - **Heap-use-after-free (26)** - the most common class, appearing across parsing, emitting, path queries, reference counting, iteration, alias handling, and list operations. Includes one double-free.
 - **Memory leaks (16)** - memory not properly freed on error paths or during cleanup, spread across parsing, emitting, path queries, alias handling, and the type reflection system.
@@ -119,14 +119,56 @@ In total, I reported **68 issues** to the libfyaml GitHub repository. All of the
 - **Out-of-memory (1)** - a path query consuming unbounded memory.
 - **API/documentation issue (1)** - a function referenced in the documentation that didn't exist in the library.
 
-All issues were reported with reproducer inputs and sanitizer stack traces. The maintainer was responsive and fixed everything. The full list of reports can be found on the [libfyaml issues page](https://github.com/pantoniou/libfyaml/issues?q=is%3Aissue%20author%3Arivit98).
+All issues were reported with reproducer inputs and sanitizer stack traces. The maintainer was responsive and fixed everything.
 
-## A note on AI
+### A note on AI
 
-Every single one of these 68 bugs was found without any AI assistance. The fuzzer was written by hand, the triage was done manually, and the reports were filed by a human.
+Every single one of these 68 bugs was found without any AI assistance. The fuzzer was written by hand, the triage was done manually, and the reports were filed by a human. That changed in the update above.
 
 I originally had plans to turn some of the more interesting bugs (particularly the use-after-free ones) into a CTF challenge. But in the current AI era, where LLMs can solve most CTF challenges without much effort, I decided not to waste time on that. It just doesn't feel worth the effort anymore when the solution process can be shortcut so easily.
 
+
+## Update, 25.10.2026
+
+The campaign has reached **247 bugs** reported to libfyaml. All of them are closed on the [libfyaml issues page](https://github.com/pantoniou/libfyaml/issues?q=is%3Aissue%20author%3Arivit98). The fuzzing setup is in [rivit98/libfyaml](https://github.com/rivit98/libfyaml).
+
+### What changed
+
+| | first campaign | now |
+|---|---|---|
+| engine | libFuzzer | AFL++, persistent mode |
+| input header | 36 bytes, nine `uint32_t` fields | one `uint32_t` flag seed, expanded by `setup_flags()` |
+| harness | one function, every test case on every input | three group functions, selected per campaign |
+| error paths | not exercised on purpose | allocation failure injection on a share of inputs |
+| reproducibility | non-deterministic heap | deterministic heap for the non-sanitizer builds |
+| triage | by hand | a Claude Code skill, with rules in the repo |
+
+Most of these changes answer the problems I listed in the first campaign. The header was too big, running everything on every input was slow, and the shared input made each test case see data meant for another. The header-based design I defended above is gone, since the seed block is now one `uint32_t`.
+
+### Splitting libfyaml into groups
+
+libfyaml's surface breaks into three families, and the harness follows them. The input shape decides the split: a YAML document, a path expression and a packed reflection blob are three different languages.
+
+| group | what it feeds |
+|---|---|
+| `yaml` | the parser, its input sources, the document and generic builders |
+| `path` | path and ypath expressions, walked against a fixed corpus document |
+| `reflection` | the reflection type system |
+
+Each group has its own checked-in seed corpus: 1926 seeds for `yaml`, 513 for `path` and 398 for `reflection`. The `yaml` seeds come from the yaml-test-suite, JSONTestSuite and libfyaml's own test data, the `path` seeds are hand-written expressions, and the `reflection` seeds come from libfyaml's reflection test data. Each corpus was minimized with `afl-cmin` under its group's test case.
+
+### Allocation failure injection
+
+The biggest addition to the harness is `fuzz_alloc_fail.h`. For each test case, one allocation can fail: the nth `malloc()`, `calloc()` or `realloc()`, along with libc functions that allocate internally, such as `strdup()` and `fopen()`. The first campaign never touched the cleanup code that runs when an allocation fails. The injected failures do, and most of the new reports come from there.
+
+### How AI was used
+
+The first campaign had no AI in it. From here on it was part of the workflow, in two places.
+
+- **Improving the harness.** AI helped improve the harness code.
+- **Triage and reporting.** AI was used to triage the campaign findings. The repo has a `triage-crash` skill, which takes a fuzzer artifact or a directory of sanitizer logs and replays each one through the reproducer builds. Deduplication is done by replay, not by the sanitizer parser's groups, because one root cause often shows up as several groups under ASAN, MSAN and the plain build. It also writes minified reproducers and creates the GitHub issues.
+
+
 ## Summary
 
-Fuzzing libfyaml turned out to be quite productive. 68 bugs across a wide range of categories - from use-after-free and buffer overflows to memory leaks and undefined behavior. The single-harness multi-target approach worked well here because the library has so many interconnected features that benefit from being exercised together.
+Fuzzing libfyaml has produced 247 issues. The first campaign found 68 bugs with a single libFuzzer harness, where one function ran every test case on every input. The 25.10.2026 update moved the campaign to AFL++, split the harness into three groups that match the library's subsystems, and added allocation failure injection for the error paths. I learned a lot about fuzzing along the way. The maintainer was very quick to fix the bugs I reported, which kept the loop from crash to fixed code short. 
