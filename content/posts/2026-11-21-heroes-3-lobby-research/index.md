@@ -1,7 +1,7 @@
 ---
 title: "Heroes of Might and Magic 3 online lobby adventures"
 description: Reverse engineering the Heroes of Might and Magic 3 HD+ online lobby protocol, with a focus on security
-date: 2026-09-03
+date: 2026-11-21
 categories:
     - reverse-engineering
     - security
